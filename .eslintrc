@@ -1,0 +1,23 @@
+{
+  "env": {
+    "browser": true,       // 支援瀏覽器環境
+    "es2021": true,        // 使用 ECMAScript 2021 版本
+  },
+  "extends": [
+    "eslint:recommended",  // 使用 ESLint 預設建議的規則
+    "plugin:prettier/recommended" // 使用 Prettier 插件來確保格式一致
+  ],
+  "parserOptions": {
+    "ecmaVersion": 12,     // 使用 ECMAScript 2021 語法
+    "sourceType": "module" // 允許使用模組導入（import/export）
+  },
+  "rules": {
+    "no-undef": "error",     // 檢查未宣告的變數，並顯示錯誤
+    "no-unused-vars": "warn", // 警告未使用的變數
+    "semi": ["error", "always"], // 強制使用分號
+    "prettier/prettier": "error" // 確保 Prettier 格式規範被遵守
+  },
+  "plugins": [
+    "prettier"  // 使用 Prettier 插件來統一代碼格式
+  ]
+}

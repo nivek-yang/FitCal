@@ -1,0 +1,85 @@
+{
+  // ---------- Python 設定 ----------
+  // "python.formatting.provider": "ruff",  // 使用 Ruff 作為格式化工具
+  "editor.formatOnSave": true,  // 開啟保存時自動格式化
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",  // 使用官方 Python 格式化工具
+    "editor.formatOnSave": true,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true
+  },
+  "python.linting.enabled": true,  // 啟用 Python Linting
+  "python.linting.ruffEnabled": true,  // 啟用 Ruff 進行檢查
+
+  // ---------- Emmet 與 HTML 模板 ----------
+  "emmet.includeLanguages": {
+    "html": "html",
+    "django-html": "html"
+  },
+  "emmet.triggerExpansionOnTab": true,  // 開啟 Tab 鍵觸發 Emmet 展開
+
+  // ---------- 強制啟用 HTML 屬性補全 ----------
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
+  },
+
+  // ---------- 強制將 .html 和 .djhtml 強制映射為 django-html ----------
+  "files.associations": {
+    "**/*.html": "html",
+    "**/templates/**/*.html": "django-html",
+    "**/templates/**/*.djhtml": "django-html"
+  },
+
+  // ---------- Tailwind CSS 類名補全 ----------
+  "tailwindCSS.includeLanguages": {
+    "django-html": "html",
+    "html": "html"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    "class\\s*=\\s*['\"]([^'\"]*)['\"]",
+    "class:\\s*['\"]([^'\"]*)['\"]"
+  ],
+  "tailwindCSS.emmetCompletions": true,  // 啟用 Emmet 類名補全
+  "tailwindCSS.showPixelEquivalents": true,  // 顯示像素對應
+  "tailwindCSS.colorDecorators": true,  // 顯示顏色裝飾
+  "editor.colorDecorators": true,  // 啟用顏色裝飾
+
+  // ---------- 儲存時自動修復與整理 ----------
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",  // 在保存時自動修復所有可修復的問題
+    "source.organizeImports": "explicit"  // 整理導入語句
+  },
+
+  // ---------- 額外設置 ----------
+  "editor.wordWrap": "on",  // 啟用自動換行
+  "editor.linkedEditing": true,  // 啟用鏈接編輯功能
+  "files.autoGuessEncoding": true,  // 自動猜測文件編碼
+  "files.eol": "\n",  // 設定換行符號為 LF
+  "editor.renderWhitespace": "none",  // 不顯示空格字符
+
+  // ---------- Javascript 和 CSS 設定 ----------
+  "[javascript]": {
+    "editor.tabSize": 2,
+    "editor.maxTokenizationLineLength": 2500,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",  // 指定 Prettier 作為格式化工具
+    "editor.formatOnSave": true  // 開啟保存時自動格式化
+  },
+  "[css]": {
+    "editor.tabSize": 2,
+    "editor.suggest.insertMode": "replace",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",  // 指定 Prettier 作為格式化工具
+    "editor.formatOnSave": true  // 開啟保存時自動格式化
+  },
+  "[html]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",  // 指定 Prettier 作為格式化工具
+    "editor.formatOnSave": true  // 開啟保存時自動格式化
+  },
+  "[django-html]": {
+    "editor.tabSize": 2,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",  // 指定 Prettier 作為格式化工具
+    "editor.formatOnSave": true  // 開啟保存時自動格式化
+  }
+}
