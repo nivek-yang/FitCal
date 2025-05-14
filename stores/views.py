@@ -31,7 +31,7 @@ def show(req, id):
         if form.is_valid():
             form.save()
             return redirect('stores:show', store.id)
-        return render(req, 'stores/show.html', {'store': store, 'form': form})
+        return render(req, 'stores/edit.html', {'store': store, 'form': form})
 
     else:
         form = StoreForm(instance=store)
@@ -43,18 +43,10 @@ def show(req, id):
         )
 
 
-def edit(req, store_id):
-    store = get_object_or_404(Store, id=store_id)
-
-    if req.method == 'POST':
-        form = StoreForm(req.POST, instance=store)
-        if form.is_valid():
-            form.save()
-            return redirect('stores:show', store.id)
-        return render(req, 'stores/edit.html', {'form': form, 'store': store})
-    else:
-        form = StoreForm(instance=store)
-        return render(req, 'stores/edit.html', {'form': form, 'store': store})
+def edit(req, id):
+    store = get_object_or_404(Store, id=id)
+    form = StoreForm(instance=store)
+    return render(req, 'stores/edit.html', {'store': store, 'form': form})
 
 
 def delete(req, id):
