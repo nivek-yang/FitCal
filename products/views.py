@@ -8,8 +8,11 @@ from .models import Product
 def index(request):
     if request.POST:
         form = ProductForm(request.POST)
-        product= form.save()
-        return redirect('products:show', product.id)
+        if form.is_valid():
+            product = form.save()
+            return redirect('products:show', product.id)
+        else:
+            return render(request, 'products/new.html', {'form': form})
     products = Product.objects.all()
     return render(request, 'products/index.html', {'products': products})
 
@@ -23,8 +26,13 @@ def show(request, id):
     product = get_object_or_404(Product, pk=id)
     if request.POST:
         form = ProductForm(request.POST, instance=product)
-        form.save()
-        return redirect('products:show', product.id)
+        if form.is_valid():
+            form.save()
+            return redirect('products:show', product.id)
+        else:
+            return render(
+                request, 'products/edit.html', {'product': product, 'form': form}
+            )
     return render(request, 'products/show.html', {'product': product})
 
 
