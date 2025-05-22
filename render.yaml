@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: fitcal
+    env: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fitcal-db
+          property: connectionString
+      - key: DJANGO_SETTINGS_MODULE
+        value: fitcal.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+
+databases:
+  - name: fitcal-db
+    databaseName: fitcal
+    plan: free

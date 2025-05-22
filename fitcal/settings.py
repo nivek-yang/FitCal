@@ -32,7 +32,9 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = env.list(
+    'ALLOWED_HOSTS', default=['127.0.0.1', 'localhost', '.onrender.com']
+)
 
 
 # Application definition
@@ -50,7 +52,6 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.line',
     'carts',
-    'debug_toolbar',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,29 +61,12 @@ INSTALLED_APPS = [
     'stores',
 ]
 
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  # 預設認證後端
-    'allauth.account.auth_backends.AuthenticationBackend',  # allauth 認證後端
-]
-
-SITE_ID = 1  # Django Sites Framework 的 ID，預設為 1
-
-LOGIN_REDIRECT_URL = '/'  # 登入成功後的重導向 URL
-LOGOUT_REDIRECT_URL = '/'  # 登出後的重導向 URL
-
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
-# ACCOUNT_SIGNUP_FIELDS = ['email']
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-
+if DEBUG:
+    INSTALLED_APPS.append('debug_toolbar')
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -90,8 +74,12 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
-    'middleware.block_merchant_cart.BlockMerchantCartMiddleware',  # 限制/cart/相關路由只有登入的會員可以使用
+    'middleware.block_merchant_cart.BlockMerchantCartMiddleware',
 ]
+
+if DEBUG:
+    MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+
 
 ROOT_URLCONF = 'fitcal.urls'
 
@@ -142,9 +130,13 @@ SOCIALACCOUNT_PROVIDERS = {
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
 # OAUTH_PKCE_ENABLED: True
-SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
-    'http://127.0.0.1:8000/accounts/google/login/callback/'
-    'http://localhost:8000/accounts/google/login/callback/'
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = env.list(
+    'OAUTH_REDIRECT_URIS',
+    default=[
+        'http://127.0.0.1:8000/accounts/google/login/callback/',
+        'http://localhost:8000/accounts/google/login/callback/',
+        'https://{your-app-name}.onrender.com/accounts/google/login/callback/',
+    ],
 )
 
 
@@ -152,9 +144,12 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = (
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    # 自動解析 DATABASE_URL
-    'default': env.db()
+    'default': env.db(),
 }
+
+# 在生產環境中啟用 SSL
+if not DEBUG:
+    DATABASES['default']['OPTIONS'] = {'sslmode': 'require'}
 
 
 # Password validation
@@ -194,9 +189,24 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+
+# 啟用 WhiteNoise 的壓縮和快取
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+
+# Security Settings
+if not DEBUG:
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000  # 1 year
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
