@@ -2,7 +2,6 @@
 <h1>店家列表</h1>
 
 {% if store %}
-
 <a href="{% url 'stores:show' store.id %}">
   <section>
     <h1>店家名稱：{{ store.name }}</h1>
@@ -13,7 +12,6 @@
     <h1>打烊時間：{{ store.closing_time }}</h1>
   </section>
 </a>
-
 {% else %}
-<p>目前沒有店家資料</p>
+<a href="{% url "stores:new" %}" class="btn">新增店家資訊</a>
 {% endif %} {% endblock main %}

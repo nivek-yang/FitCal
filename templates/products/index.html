@@ -4,7 +4,7 @@
 <ul>
   {% for product in products %}
   <li>
-    <a href="{% url 'products:show' product.id %}">
+    <a href="{% url 'products:show' product.id %}" class="block border-2 rounded-sm mb-2">
       <section>
         <h3>{{ product.name }}</h3>
         <h3>{{ product.description }}</h3>
